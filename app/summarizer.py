@@ -14,7 +14,7 @@ TEMPLATES = {
                               "—could caffeine be affecting you?"),
 }
 
-OUTPUT_FILE = 'data/coach_messages.txt'
+OUTPUT_FILE = '../data/coach_messages.txt'
 
 
 def generate_coach_messages():
