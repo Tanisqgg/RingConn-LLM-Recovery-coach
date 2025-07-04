@@ -1,6 +1,6 @@
 import os
 from sentence_transformers import SentenceTransformer
-from langchain_chroma import Chroma
+from langchain.vectorstores import Chroma
 
 # CONFIG
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
