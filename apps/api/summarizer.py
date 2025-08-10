@@ -1,6 +1,5 @@
 import os
-import pandas as pd
-from anomaly_detector import load_segments, compute_daily_metrics, update_baseline, flag_anomalies
+from apps.api.anomaly_detector import load_segments, compute_daily_metrics, update_baseline, flag_anomalies
 
 # CONFIG: templates for each stage
 TEMPLATES = {
@@ -14,7 +13,7 @@ TEMPLATES = {
                               "—could caffeine be affecting you?"),
 }
 
-OUTPUT_FILE = '../data/coach_messages.txt'
+OUTPUT_FILE = '../../data/coach_messages.txt'
 
 
 def generate_coach_messages():

@@ -15,21 +15,22 @@ SCOPES = [
 def get_credentials():
     creds = None
     # 1) Load cached credentials
-    if os.path.exists('../token.json'):
-        creds = Credentials.from_authorized_user_file('../token.json', SCOPES)
+    if os.path.exists('../../token.json'):
+        creds = Credentials.from_authorized_user_file('../../token.json', SCOPES)
     # 2) If no valid creds, go through OAuth flow (or refresh)
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file('../credentials.json', SCOPES)
+            flow = InstalledAppFlow.from_client_secrets_file('../../credentials.json', SCOPES)
             creds = flow.run_local_server(port=0)
         # 3) Cache the new credentials
-        with open('../token.json', 'w') as token:
+        with open('../../token.json', 'w') as token:
             token.write(creds.to_json())
     return creds
 
 def main():
+    os.makedirs('../data', exist_ok=True)
     creds   = get_credentials()
     service = build('fitness', 'v1', credentials=creds)
 
@@ -62,7 +63,6 @@ def main():
     print(df_sess[['id','name','start_time','end_time']])
 
     # Optional: save to CSV
-    os.makedirs('../data', exist_ok=True)
     df_sess.to_csv('data/sleep_sessions.csv', index=False)
 
     # ——————————————————————————————

@@ -4,7 +4,7 @@ from langchain_chroma import Chroma
 
 # CONFIGURATION
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
-PERSIST_DIR = "../data/chroma_store"
+PERSIST_DIR = "../../data/chroma_store"
 
 
 def init_vectorstore():
@@ -39,7 +39,7 @@ def query_memory(query, k=5):
 
 
 if __name__ == '__main__':
-    from summarizer import generate_coach_messages
+    from apps.api.summarizer import generate_coach_messages
 
     date, msgs = generate_coach_messages()
     add_summaries_to_memory(date, msgs)

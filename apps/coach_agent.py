@@ -1,8 +1,8 @@
 # coach_agent.py
 
 from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
-from summarizer import generate_coach_messages
-from memory import query_memory
+from apps.api.summarizer import generate_coach_messages
+from apps.api.memory import query_memory
 
 # MODEL — use your chosen instruction-tuned model
 MODEL_NAME = "tiiuae/falcon-7b-instruct"  # or mistral/zephyr etc.
