@@ -62,9 +62,10 @@
                     <label class="flex flex-col min-w-40 flex-1">
                         <p class="text-white text-base font-medium leading-normal pb-2">Upload RingConn Data</p>
                         <input
-                                placeholder="Click to upload your sleep data"
+                                id="fileInput"
+                                type="file"
+                                accept=".csv"
                                 class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border border-[#344b65] bg-[#1a2532] focus:border-[#344b65] h-14 placeholder:text-[#93acc8] p-[15px] text-base font-normal leading-normal"
-                                value=""
                         />
                     </label>
                 </div>
@@ -229,9 +230,9 @@
                     <label class="flex flex-col min-w-40 h-12 flex-1">
                         <div class="flex w-full flex-1 items-stretch rounded-xl h-full">
                             <input
+                                    id="chatInput"
                                     placeholder="Ask me anything about your sleep data"
                                     class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#243447] focus:border-none h-full placeholder:text-[#93acc8] px-4 rounded-r-none border-r-0 pr-2 text-base font-normal leading-normal"
-                                    value=""
                             />
                             <div class="flex border-none bg-[#243447] items-center justify-center pr-4 rounded-r-xl border-l-0 !pr-2">
                                 <div class="flex items-center gap-4 justify-end">
@@ -249,6 +250,7 @@
                                         </button>
                                     </div>
                                     <button
+                                            id="sendBtn"
                                             class="min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-8 px-4 bg-[#1978e5] text-white text-sm font-medium leading-normal hidden @[480px]:block"
                                     >
                                         <span class="truncate">Send</span>
@@ -259,8 +261,46 @@
                     </label>
                 </div>
             </div>
+            <img id="pieChart" src="/graph/pie" alt="Sleep Stage Distribution" class="px-4 py-4"/>
+            <div id="chatLog" class="px-4 py-3 text-white space-y-2"></div>
         </div>
     </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const fileInput = document.getElementById('fileInput');
+    if (fileInput) {
+        fileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const formData = new FormData();
+            formData.append('file', file);
+            const res = await fetch('/upload', { method: 'POST', body: formData });
+            const data = await res.json();
+            alert(data.message || data.error);
+        });
+    }
+
+    const sendBtn = document.getElementById('sendBtn');
+    const chatInput = document.getElementById('chatInput');
+    const chatLog = document.getElementById('chatLog');
+    if (sendBtn && chatInput && chatLog) {
+        sendBtn.addEventListener('click', async () => {
+            const msg = chatInput.value.trim();
+            if (!msg) return;
+            const res = await fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: msg })
+            });
+            const data = await res.json();
+            const p = document.createElement('p');
+            p.textContent = data.response;
+            chatLog.appendChild(p);
+            chatInput.value = '';
+        });
+    }
+});
+</script>
 </body>
 </html>

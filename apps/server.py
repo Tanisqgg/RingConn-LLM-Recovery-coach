@@ -1,4 +1,5 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, send_file
+import os
 from flask_cors import CORS
 from coach_agent import run_chat
 from plotter import plot_weekly_pie
@@ -28,7 +29,7 @@ def upload():
 @app.route("/graph/pie", methods=["GET"])
 def graph_pie():
     path = plot_weekly_pie()
-    return jsonify({"image": path})
+    return send_file(os.path.abspath(path), mimetype="image/png")
 
 if __name__ == "__main__":
     app.run(port=5000)
