@@ -29,6 +29,7 @@ OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "").strip()
 DEFAULT_MODEL = os.getenv("COACH_MODEL", "tiiuae/falcon-7b-instruct")
 FALLBACK_MODEL = os.getenv("COACH_MODEL_FALLBACK", "microsoft/Phi-3-mini-4k-instruct")
 _hf_pipe = None
+ENABLE_HF = os.getenv("ENABLE_HF", "0").strip() == "1"
 
 
 def is_ollama_up() -> Tuple[bool, set]:
@@ -42,6 +43,16 @@ def is_ollama_up() -> Tuple[bool, set]:
     except Exception:
         pass
     return False, set()
+
+
+def _ollama_model_available() -> bool:
+    """True if Ollama is reachable and the configured model exists locally."""
+    if not OLLAMA_MODEL:
+        return False
+    up, names = is_ollama_up()
+    if not up:
+        return False
+    return OLLAMA_MODEL in names
 
 
 # -----------------------------
@@ -164,10 +175,8 @@ def _context_pack() -> str:
 # Ollama / HF text generation
 # -----------------------------
 def _reply_with_ollama(user_input: str) -> str | None:
-    if not OLLAMA_MODEL:
-        return None
-    up, _ = is_ollama_up()
-    if not up:
+    # Only attempt if the configured model is actually available locally.
+    if not _ollama_model_available():
         return None
     try:
         system_prompt = (
@@ -213,6 +222,10 @@ def _load_hf_pipeline():
     global _hf_pipe
     if _hf_pipe is not None:
         return _hf_pipe
+    # Avoid heavy downloads/initialization unless explicitly enabled via ENABLE_HF=1
+    if not ENABLE_HF:
+        _hf_pipe = None
+        return None
     try:
         from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 
@@ -256,6 +269,19 @@ def _load_hf_pipeline():
 def _reply_with_hf(user_input: str) -> str:
     pipe = _load_hf_pipeline()
     if pipe is None:
+        # If no local HF model is enabled/available, try a data-driven summary
+        # for sleep-related prompts using your existing metrics.
+        pl = (user_input or "").lower()
+        if any(k in pl for k in ["sleep", "rest", "bed", "wake", "habit"]):
+            try:
+                today, msgs = generate_coach_messages()
+                if msgs:
+                    add_summaries_to_memory(today, msgs)
+                    save_messages(today, msgs)
+                    return _format_summary(today, msgs)
+            except Exception:
+                pass
+        # Fallback quick tips if we cannot compute a summary.
         return (
             "I'm your health coach. I couldn't load a local language model right now. "
             "Quick tips: consistent bed/wake times, reduce screens 1h before bed, hydrate earlier, avoid caffeine after noon."
@@ -405,6 +431,56 @@ def _series_sleep_stages_7d() -> Tuple[List[str], Dict[str, List[float]]]:
     return labels, {"Light": col("Light sleep"), "Deep": col("Deep sleep"), "REM": col("REM sleep")}
 
 
+def _series_sleep_total_7d() -> Tuple[List[str], List[float]]:
+    segs = load_segments()
+    if segs.empty:
+        return [], []
+    daily = compute_daily_metrics(segs).sort_values("date").tail(7)
+    if daily.empty:
+        return [], []
+    labels = [pd.to_datetime(d).date().isoformat() for d in daily["date"]]
+    totals = [float(x) if pd.notna(x) else 0.0 for x in daily.get("Sleep", [])]
+    return labels, totals
+
+
+def _series_sleep_window_7d() -> Tuple[List[str], List[float], List[float]]:
+    """Return (labels, start_hour_local, end_hour_local) for last 7 nights.
+    Hours are in 24h, fractional (e.g., 22.5 = 22:30)."""
+    segs = load_segments()
+    if segs.empty:
+        return [], [], []
+    # Consider the restful window (exclude awake-during-sleep periods)
+    rest = segs[segs["stage"] != "Awake (during sleep)"]
+    if rest.empty:
+        return [], [], []
+    grp = rest.groupby("night")
+    first_start = grp["start"].min()
+    last_end = grp["end"].max()
+    # Sort by night and keep last 7
+    nights = sorted(list(set(rest["night"])))
+    nights = nights[-7:]
+    # Convert to local tz for hour-of-day visualization
+    try:
+        local_tz = datetime.now().astimezone().tzinfo
+        s_local = first_start.dt.tz_convert(local_tz)
+        e_local = last_end.dt.tz_convert(local_tz)
+    except Exception:
+        s_local = first_start
+        e_local = last_end
+    labels: List[str] = []
+    starts: List[float] = []
+    ends: List[float] = []
+    for n in nights:
+        s = s_local.get(n)
+        e = e_local.get(n)
+        if pd.isna(s) or pd.isna(e):
+            continue
+        labels.append(pd.to_datetime(n).isoformat())
+        starts.append(float(s.hour) + float(s.minute) / 60.0)
+        ends.append(float(e.hour) + float(e.minute) / 60.0)
+    return labels, starts, ends
+
+
 # -----------------------------
 # Deterministic (server-side) chart specs for common asks
 # -----------------------------
@@ -474,6 +550,23 @@ def _build_sleep_stages_7d_spec() -> Dict[str, Any] | None:
     }
 
 
+def _build_sleep_window_7d_spec() -> Dict[str, Any] | None:
+    labels, start_h, end_h = _series_sleep_window_7d()
+    if not labels:
+        return None
+    return {
+        "title": "Sleep Start vs End (last 7 nights)",
+        "type": "line",
+        "labels": labels,
+        "datasets": [
+            {"label": "Sleep start (hour)", "data": start_h},
+            {"label": "Wake time (hour)", "data": end_h},
+        ],
+        "yTitle": "hour of day",
+        "stacked": False,
+    }
+
+
 def _build_calories_next3_spec() -> Dict[str, Any] | None:
     labels, vals = _series_calories_7d()
     if not labels:
@@ -508,6 +601,8 @@ def _direct_viz_spec(user_input: str) -> Dict[str, Any] | None:
         return _build_intraday_hr_spec()
     if "sleep" in q and ("stage" in q or "last 7" in q or "week" in q):
         return _build_sleep_stages_7d_spec()
+    if ("sleep start" in q and ("end" in q or "wake" in q)) or ("bedtime" in q and ("waketime" in q or "wake time" in q)):
+        return _build_sleep_window_7d_spec()
     if "calor" in q and ("next 3" in q or "next three" in q or "projection" in q or "forecast" in q):
         return _build_calories_next3_spec()
     return None
@@ -522,12 +617,16 @@ def _viz_context_json() -> str:
     h_labels, h_avg, h_min, h_max = _series_hr_7d()
     hd_labels, hd_vals = _series_hr_intraday()
     sl_labels, sl = _series_sleep_stages_7d()
+    st_labels, st_vals = _series_sleep_total_7d()
+    sw_labels, sw_start, sw_end = _series_sleep_window_7d()
     ctx = {
         "steps7": {"labels": s_labels, "data": s_vals},
         "calories7": {"labels": c_labels, "data": c_vals},
         "hr7": {"labels": h_labels, "avg": h_avg, "min": h_min, "max": h_max},
         "hr_intraday": {"labels": hd_labels, "avg": hd_vals},
         "sleep7": {"labels": sl_labels, "light": sl["Light"], "deep": sl["Deep"], "rem": sl["REM"]},
+        "sleep_total7": {"labels": st_labels, "minutes": st_vals},
+        "sleep_window7": {"labels": sw_labels, "start_hour": sw_start, "end_hour": sw_end},
         "now": datetime.now(timezone.utc).isoformat(),
     }
     return json.dumps(ctx, ensure_ascii=False)
@@ -545,8 +644,7 @@ def _try_parse_json_block(text: str) -> Dict[str, Any] | None:
 
 
 def _reply_with_ollama_viz(user_input: str) -> Dict[str, Any] | None:
-    up, _ = is_ollama_up()
-    if not (OLLAMA_MODEL and up):
+    if not _ollama_model_available():
         return None
     try:
         system = (
@@ -556,10 +654,11 @@ def _reply_with_ollama_viz(user_input: str) -> Dict[str, Any] | None:
             "Rules:\n"
             "- Use labels exactly from the context for the series you plot.\n"
             "- datasets is a list of {label, data} aligned to labels.\n"
-            "- Do not invent or smooth values; pick from hr7/steps7/calories7/hr_intraday/sleep7.\n"
+            "- Do not invent or smooth values; pick from hr7/steps7/calories7/hr_intraday/sleep7/sleep_total7/sleep_window7.\n"
             "- If user asks for sleep stages, use type='stackedBar' with Light/Deep/REM minutes.\n"
             "- If user asks for intraday HR today, use hr_intraday.avg.\n"
             "- If user asks to compare steps vs calories, include both datasets sharing the same (last 7) labels.\n"
+            "- If user asks for sleep start vs end (bedtime vs wake time), use 'sleep_window7' with type='line' and two datasets: start_hour and end_hour.\n"
             "- If unclear, pick the most relevant single series."
         )
         context = _viz_context_json()
@@ -602,6 +701,37 @@ def run_chat(user_input: str) -> Tuple[str, Dict[str, Any] | None]:
     prompt = (user_input or "").strip()
     pl = prompt.lower()
 
+    # Fast path for chart-like prompts: avoid making both text and viz LLM calls.
+    if any(
+        k in pl
+        for k in [
+            "plot",
+            "chart",
+            "graph",
+            "trend",
+            "visual",
+            "visualize",
+            "vs",
+            "compare",
+            "show me",
+            "forecast",
+            "projection",
+        ]
+    ):
+        # Try deterministic spec first (no LLM).
+        spec = _direct_viz_spec(prompt)
+        if spec:
+            return "Here’s the chart you asked for.", spec
+        # Try a single Ollama viz call if the model is ready.
+        spec = _reply_with_ollama_viz(prompt)
+        if spec:
+            return "Here’s the chart you asked for.", spec
+        # Still nothing: respond quickly with suggestions (no LLM calls).
+        return (
+            "I couldn’t build that chart yet. Try: ‘plot intraday HR’, ‘compare steps vs calories’, or ‘sleep stages chart last 7 days’.",
+            None,
+        )
+
     # If user asked for a chart, try fast deterministic viz FIRST (no LLM).
     charty = any(
         k in pl
@@ -621,7 +751,16 @@ def run_chat(user_input: str) -> Tuple[str, Dict[str, Any] | None]:
         any(t in pl for t in age_triggers) or any(t in pl for t in sex_triggers)
     ):
         text = _data_driven_compare(age=20, sex="male")
-    elif any(k in pl for k in ["summary", "report", "how did i sleep"]):
+    elif any(k in pl for k in [
+        "summary",
+        "report",
+        "how did i sleep",
+        "how is my sleep",
+        "how are my sleep",
+        "sleep habits",
+        "sleep habit",
+        "sleep quality",
+    ]):
         today, msgs = generate_coach_messages()
         add_summaries_to_memory(today, msgs)
         save_messages(today, msgs)
@@ -649,6 +788,5 @@ def run_chat(user_input: str) -> Tuple[str, Dict[str, Any] | None]:
     else:
         text = _reply_with_ollama(prompt) or _reply_with_hf(prompt)
 
-    # If it *sounded* charty but we didn't build a spec deterministically, try the LLM viz as a fallback.
-    viz_spec = _reply_with_ollama_viz(prompt) if charty else None
-    return text, viz_spec
+    # End of text-first path. Avoid extra LLM calls here to reduce latency/timeouts.
+    return text, None

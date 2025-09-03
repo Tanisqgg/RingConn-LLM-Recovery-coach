@@ -4,25 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e6dea38d-eb2f-4e75-9cd9-7163f713a900" name="Changes" comment="accuracy improvement">
-      <change afterPath="$PROJECT_DIR$/app/anomaly_detector.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/fit_sync.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/summarizer.py" afterDir="false" />
+    <list default="true" id="e6dea38d-eb2f-4e75-9cd9-7163f713a900" name="Changes" comment="revamped ui and changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/api/anomaly_detector.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/api/fit_sync.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/api/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/api/memory.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/memory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/api/requirements.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/api/summarizer.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/coach_agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/coach_agent.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/plotter.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/plotter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/server.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/tts.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/tts.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/app/api.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/app/api/sleep/summary/route.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/dashboardUI.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/coach_agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/coach_agent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/server.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/calories_daily.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/calories_daily.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/hr_daily.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/hr_daily.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/hr_intraday.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/hr_intraday.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/metrics_baseline.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/metrics_baseline.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sleep_segments.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/sleep_segments.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/steps_daily.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/steps_daily.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/App.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,7 +72,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/tanis/OneDrive/Desktop/tan priv/RingConn-gen-2-LLM-personalizer/data&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/tanis/OneDrive/Desktop/projects/layoff_prediction&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -136,6 +128,15 @@
       <workItem from="1756159337266" duration="3000" />
       <workItem from="1756159522706" duration="3214000" />
       <workItem from="1756162855487" duration="1866000" />
+      <workItem from="1756164926781" duration="1346000" />
+      <workItem from="1756439962985" duration="951000" />
+      <workItem from="1756489748098" duration="6000" />
+      <workItem from="1756489801640" duration="294000" />
+      <workItem from="1756490735936" duration="827000" />
+      <workItem from="1756578255327" duration="320000" />
+      <workItem from="1756578606905" duration="33000" />
+      <workItem from="1756621993608" duration="28000" />
+      <workItem from="1756921801392" duration="53000" />
     </task>
     <task id="LOCAL-00001" summary="v1">
       <option name="closed" value="true" />
@@ -177,7 +178,23 @@
       <option name="project" value="LOCAL" />
       <updated>1754804580307</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="revamped ui and changes">
+      <option name="closed" value="true" />
+      <created>1756165009376</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1756165009376</updated>
+    </task>
+    <task id="LOCAL-00007" summary="revamped ui and changes">
+      <option name="closed" value="true" />
+      <created>1756165628563</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1756165628563</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -188,7 +205,8 @@
     <MESSAGE value="llm addition" />
     <MESSAGE value="frontend Ui" />
     <MESSAGE value="accuracy improvement" />
-    <option name="LAST_COMMIT_MESSAGE" value="accuracy improvement" />
+    <MESSAGE value="revamped ui and changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="revamped ui and changes" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/RingConn_gen_2_LLM_personalizer$pandascheck.coverage" NAME="pandascheck Coverage Results" MODIFIED="1751323343909" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
