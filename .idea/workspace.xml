@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e6dea38d-eb2f-4e75-9cd9-7163f713a900" name="Changes" comment="revamped ui and changes">
+    <list default="true" id="e6dea38d-eb2f-4e75-9cd9-7163f713a900" name="Changes" comment="new readiness model, ui and performace upgrades">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/coach_agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/coach_agent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/server.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/calories_daily.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/calories_daily.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/hr_daily.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/hr_daily.csv" afterDir="false" />
@@ -14,7 +14,6 @@
       <change beforePath="$PROJECT_DIR$/data/metrics_baseline.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/metrics_baseline.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/sleep_segments.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/sleep_segments.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/steps_daily.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/steps_daily.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/App.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,7 +77,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\tanis\\OneDrive\\Desktop\\tan priv\\RingConn-gen-2-LLM-personalizer\\web\\node_modules\\typescript\\lib&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\PyCharm 2024.3.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -97,8 +96,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-PY-243.26053.29" />
-        <option value="bundled-python-sdk-b1dbf8ef85a6-4df51de95216-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.26053.29" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-PY-243.26574.90" />
+        <option value="bundled-python-sdk-c1fac28bca04-4df51de95216-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.26574.90" />
       </set>
     </attachedChunks>
   </component>
@@ -137,6 +136,17 @@
       <workItem from="1756578606905" duration="33000" />
       <workItem from="1756621993608" duration="28000" />
       <workItem from="1756921801392" duration="53000" />
+      <workItem from="1756921941849" duration="757000" />
+      <workItem from="1757002987319" duration="167000" />
+      <workItem from="1757003718109" duration="13000" />
+      <workItem from="1757101680168" duration="325000" />
+      <workItem from="1757102560563" duration="14000" />
+      <workItem from="1757446712896" duration="189000" />
+      <workItem from="1757613603301" duration="284000" />
+      <workItem from="1757615685242" duration="211000" />
+      <workItem from="1757805611766" duration="3614000" />
+      <workItem from="1757809801116" duration="1917000" />
+      <workItem from="1757883225761" duration="620000" />
     </task>
     <task id="LOCAL-00001" summary="v1">
       <option name="closed" value="true" />
@@ -194,7 +204,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756165628563</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="new readiness model, ui and performace upgrades">
+      <option name="closed" value="true" />
+      <created>1756922096437</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1756922096437</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -206,7 +224,8 @@
     <MESSAGE value="frontend Ui" />
     <MESSAGE value="accuracy improvement" />
     <MESSAGE value="revamped ui and changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="revamped ui and changes" />
+    <MESSAGE value="new readiness model, ui and performace upgrades" />
+    <option name="LAST_COMMIT_MESSAGE" value="new readiness model, ui and performace upgrades" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/RingConn_gen_2_LLM_personalizer$pandascheck.coverage" NAME="pandascheck Coverage Results" MODIFIED="1751323343909" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

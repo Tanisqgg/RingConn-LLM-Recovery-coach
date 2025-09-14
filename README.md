@@ -23,19 +23,23 @@ The application consists of two main components:
 - **Anomaly Detection**: Identifies unusual patterns in your health data
 - **Visualization Engine**: Generates charts and plots for data analysis
 
-### Frontend (React/Vite)
-- **Interactive Dashboard**: Real-time health metrics display
-- **Chat Interface**: Conversational AI coach
-- **Data Visualization**: Charts for sleep stages, heart rate trends, activity levels
-- **Responsive Design**: Modern, mobile-friendly interface
+### Frontend (React/TypeScript/Vite)
+- **Interactive Dashboard**: Real-time health metrics display with Apple-inspired design
+- **Chat Interface**: Conversational AI coach with modern UI
+- **Advanced Data Visualization**: Interactive charts for sleep stages, heart rate trends, activity levels
+- **Sleep Trends Analysis**: Detailed weekly sleep stage breakdown with real data integration
+- **Responsive Design**: Modern, mobile-friendly interface with dark theme
+- **Real-time Data Sync**: Live updates from Google Fit API
 
 ## 🚀 Features
 
 ### Health Metrics Tracking
-- **Sleep Analysis**: Detailed sleep stage breakdown with readiness scoring
+- **Sleep Analysis**: Detailed sleep stage breakdown with readiness scoring and weekly trends
+- **Real-time Sleep Data**: Live integration with Google Fit sleep segments
 - **Heart Rate Monitoring**: Daily averages, intraday trends, and resting HR analysis
 - **Activity Tracking**: Steps, calories burned, and activity patterns
 - **Readiness Score**: Composite metric combining sleep, HR, and activity data
+- **Data Validation**: Graceful handling of missing data with "No data" indicators
 
 ### AI Coaching
 - **Conversational Interface**: Natural language interactions with your health coach
@@ -45,8 +49,11 @@ The application consists of two main components:
 
 ### Data Visualization
 - **Interactive Charts**: Sleep stage pie charts, HR trends, activity comparisons
+- **Weekly Sleep Trends**: Detailed breakdown of sleep stages with real data
 - **Real-time Updates**: Live data synchronization with Google Fit
 - **Customizable Views**: Multiple chart types and time ranges
+- **Loading States**: Smooth user experience with loading indicators
+- **Error Handling**: Graceful error states for data fetching issues
 
 ## 📋 Prerequisites
 
@@ -75,7 +82,7 @@ pip install -r requirements.txt
 
 ### 3. Frontend Setup
 ```bash
-cd web
+cd frontend
 npm install
 npm run build
 cd ..
@@ -98,15 +105,46 @@ APP_TZ=America/Chicago
 
 ## 🚀 Running the Application
 
-### Start the Backend Server
+### Option 1: Quick Start (Production Build)
 ```bash
-python -m app.server
+python run_app.py
+```
+This will build the frontend and start the server. The application will be available at `http://localhost:5000`
+
+### Option 2: Development Mode
+
+**Windows:**
+```cmd
+# Command Prompt
+dev.bat
+
+# PowerShell
+.\dev.ps1
+
+# Python (if Node.js is installed)
+python dev.py
 ```
 
-The server will start on `http://localhost:5000`
+**Linux/Mac:**
+```bash
+python dev.py
+```
 
-### Access the Web Interface
-Open your browser and navigate to `http://localhost:5000`
+This will start both the frontend development server (http://localhost:3000) and backend server (http://localhost:5000) simultaneously.
+
+### Option 3: Manual Setup
+```bash
+# Terminal 1: Start backend
+python -m app.server
+
+# Terminal 2: Start frontend (development)
+cd frontend
+npm run dev
+```
+
+### Access the Application
+- **Production**: http://localhost:5000
+- **Development**: http://localhost:3000 (with hot reload)
 
 ## 📊 Data Sources
 
@@ -173,15 +211,19 @@ Coach: "Here's a comparison of your activity and calorie burn" [shows comparison
 │   ├── memory.py          # ChromaDB memory system
 │   ├── anomaly_detector.py # Health pattern analysis
 │   └── ...
-├── web/                   # Frontend React application
+├── frontend/              # React/TypeScript frontend
 │   ├── src/
-│   │   ├── App.jsx        # Main React component
+│   │   ├── App.tsx        # Main React component
 │   │   ├── components/    # UI components
-│   │   └── api.js         # API client
+│   │   ├── services/      # API client
+│   │   ├── hooks/         # Custom React hooks
+│   │   └── ui/            # UI component library
 │   └── ...
 ├── data/                  # Local data storage
 │   ├── *.csv             # Fitness data files
 │   └── chroma_store/     # Vector database
+├── run_app.py            # Production build script
+├── dev.py                # Development script
 └── requirements.txt       # Python dependencies
 ```
 
@@ -219,9 +261,25 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Verify environment variables are set correctly
 
 **Charts Not Displaying**
-- Ensure the frontend is built (`npm run build` in web directory)
+- Ensure the frontend is built (`npm run build` in frontend directory)
 - Check browser console for JavaScript errors
 - Verify data synchronization completed successfully
+
+## 🆕 Recent Updates
+
+### Frontend Improvements (Latest)
+- **Real Sleep Data Integration**: Replaced mock data with live Google Fit sleep segments
+- **Enhanced Sleep Trends**: Weekly sleep stage breakdown with actual dates and data
+- **Improved Data Handling**: Graceful handling of missing sleep data with "No data" indicators
+- **Better User Experience**: Added loading states and error handling for data fetching
+- **Date Accuracy**: Fixed date display to show actual dates from the last week
+- **TypeScript Migration**: Full TypeScript support for better development experience
+
+### Technical Improvements
+- **Data Processing**: Enhanced sleep data transformation with `processWeeklySleepData()`
+- **API Integration**: Improved frontend-backend data flow for sleep metrics
+- **Error Boundaries**: Better error handling and user feedback
+- **Performance**: Optimized data processing and rendering
 
 ## 🔮 Future Enhancements
 
@@ -235,3 +293,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ---
 
 **Note**: This application is designed for personal use and educational purposes. Always consult with healthcare professionals for medical advice.
+

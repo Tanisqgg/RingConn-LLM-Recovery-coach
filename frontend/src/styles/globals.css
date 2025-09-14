@@ -1,0 +1,330 @@
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --font-size: 14px;
+  
+  /* Oura meets Apple Design - Refined Dark Theme */
+  --dark-bg: #000000;
+  --dark-card: #1C1C1E;
+  --dark-primary-text: #FFFFFF;
+  --dark-secondary-text: #8E8E93;
+  --dark-positive: #30D158;
+  --dark-negative: #FF453A;
+  --dark-cta: #007AFF;
+  --dark-tag: #2C2C2E;
+  --dark-hover: #2C2C2E;
+  --dark-table-hover: #1C2A3A;
+  --dark-border: #38383A;
+  
+  /* Oura-inspired Accent Colors */
+  --oura-readiness: #6366F1;
+  --oura-sleep: #8B5CF6;
+  --oura-activity: #06D6A0;
+  --oura-recovery: #F59E0B;
+  
+  /* Updated theme variables for dark mode */
+  --background: #000000;
+  --foreground: #FFFFFF;
+  --card: #1C1C1E;
+  --card-foreground: #FFFFFF;
+  --popover: #1C1C1E;
+  --popover-foreground: #FFFFFF;
+  --primary: #007AFF;
+  --primary-foreground: #FFFFFF;
+  --secondary: #2C2C2E;
+  --secondary-foreground: #FFFFFF;
+  --muted: #1C1C1E;
+  --muted-foreground: #8E8E93;
+  --accent: #007AFF;
+  --accent-foreground: #FFFFFF;
+  --destructive: #FF453A;
+  --destructive-foreground: #FFFFFF;
+  --border: #38383A;
+  --input: #1C1C1E;
+  --input-background: #1C1C1E;
+  --switch-background: #38383A;
+  --font-weight-medium: 600;
+  --font-weight-normal: 400;
+  --ring: #3B82F6;
+  
+  /* Chart colors using dark theme palette */
+  --chart-1: #3B82F6;
+  --chart-2: #22C55E;
+  --chart-3: #94A3B8;
+  --chart-4: #F59E0B;
+  --chart-5: #EF4444;
+  
+  --radius: 0.75rem;
+  
+  /* Sidebar colors for dark theme */
+  --sidebar: #000000;
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-primary: #FFFFFF;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #007AFF;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: #38383A;
+  --sidebar-ring: #007AFF;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-input-background: var(--input-background);
+  --color-switch-background: var(--switch-background);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  
+  /* Dark theme specific colors */
+  --color-dark-bg: var(--dark-bg);
+  --color-dark-card: var(--dark-card);
+  --color-dark-primary-text: var(--dark-primary-text);
+  --color-dark-secondary-text: var(--dark-secondary-text);
+  --color-dark-positive: var(--dark-positive);
+  --color-dark-negative: var(--dark-negative);
+  --color-dark-cta: var(--dark-cta);
+  --color-dark-tag: var(--dark-tag);
+  --color-dark-hover: var(--dark-hover);
+  --color-dark-table-hover: var(--dark-table-hover);
+  --color-dark-border: var(--dark-border);
+  
+  /* Oura-inspired colors */
+  --color-oura-readiness: var(--oura-readiness);
+  --color-oura-sleep: var(--oura-sleep);
+  --color-oura-activity: var(--oura-activity);
+  --color-oura-recovery: var(--oura-recovery);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/**
+ * Base typography with dark theme styling
+ */
+@layer base {
+  :where(:not(:has([class*=" text-"]), :not(:has([class^="text-"])))) {
+    h1 {
+      font-size: 1.875rem;
+      font-weight: 700;
+      line-height: 1.4;
+      color: var(--dark-primary-text);
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      line-height: 1.4;
+      color: var(--dark-primary-text);
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      line-height: 1.4;
+      color: var(--dark-primary-text);
+    }
+
+    h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.4;
+      color: var(--dark-primary-text);
+    }
+
+    p {
+      font-size: 0.875rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--dark-secondary-text);
+    }
+
+    label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      line-height: 1.4;
+      color: var(--dark-primary-text);
+    }
+
+    button {
+      font-size: 0.875rem;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    input {
+      font-size: 0.875rem;
+      font-weight: 400;
+      line-height: 1.4;
+    }
+  }
+}
+
+html {
+  font-size: var(--font-size);
+}
+
+/* Dark theme utility classes */
+@layer utilities {
+  /* Text colors */
+  .text-dark-primary { color: var(--color-dark-primary-text); }
+  .text-dark-secondary { color: var(--color-dark-secondary-text); }
+  .text-dark-positive { color: var(--color-dark-positive); }
+  .text-dark-negative { color: var(--color-dark-negative); }
+  .text-dark-cta { color: var(--color-dark-cta); }
+  
+  /* Oura-inspired text colors */
+  .text-oura-readiness { color: var(--color-oura-readiness); }
+  .text-oura-sleep { color: var(--color-oura-sleep); }
+  .text-oura-activity { color: var(--color-oura-activity); }
+  .text-oura-recovery { color: var(--color-oura-recovery); }
+  
+  /* Background colors */
+  .bg-dark-bg { background-color: var(--color-dark-bg); }
+  .bg-dark-card { background-color: var(--color-dark-card); }
+  .bg-dark-tag { background-color: var(--color-dark-tag); }
+  .bg-dark-hover { background-color: var(--color-dark-hover); }
+  .bg-dark-table-hover { background-color: var(--color-dark-table-hover); }
+  
+  /* Oura-inspired backgrounds */
+  .bg-oura-readiness { background-color: var(--color-oura-readiness); }
+  .bg-oura-sleep { background-color: var(--color-oura-sleep); }
+  .bg-oura-activity { background-color: var(--color-oura-activity); }
+  .bg-oura-recovery { background-color: var(--color-oura-recovery); }
+  
+  /* Border colors */
+  .border-dark-color { border-color: var(--color-dark-border); }
+  .border-oura-readiness { border-color: var(--color-oura-readiness); }
+  .border-oura-sleep { border-color: var(--color-oura-sleep); }
+  .border-oura-activity { border-color: var(--color-oura-activity); }
+  .border-oura-recovery { border-color: var(--color-oura-recovery); }
+}
+
+/* Enhanced component styling for dark theme */
+@layer components {
+  .dark-card {
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-dark-border);
+    padding: 1.5rem;
+    background-color: var(--color-dark-card);
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 4px 12px;
+  }
+  
+  .dark-button-primary {
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    transition: all 0.2s ease;
+    color: #FFFFFF;
+    background-color: var(--color-dark-cta);
+  }
+  
+  .dark-button-primary:hover {
+    background-color: #2563eb;
+    box-shadow: 0 0 0 1px var(--color-dark-cta), 0 0 8px rgba(59, 130, 246, 0.4);
+  }
+  
+  .dark-button-secondary {
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    transition: all 0.2s ease;
+    background-color: transparent;
+    color: var(--color-dark-cta);
+    border: 1px solid var(--color-dark-cta);
+  }
+  
+  .dark-button-secondary:hover {
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+  
+  .dark-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    color: var(--color-dark-secondary-text);
+  }
+  
+  .dark-nav-item-active {
+    background-color: var(--color-dark-hover);
+    color: var(--color-dark-primary-text);
+    border: 1px solid var(--color-dark-cta);
+  }
+  
+  .dark-nav-item:hover {
+    background-color: var(--color-dark-hover);
+    color: var(--color-dark-primary-text);
+  }
+
+  .dark-shadow {
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 4px 12px;
+  }
+  
+  .dark-shadow-lg {
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 8px 24px;
+  }
+  
+  .dark-tag {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #FFFFFF;
+    background-color: var(--color-dark-tag);
+  }
+  
+  .dark-metric-positive {
+    color: var(--color-dark-positive);
+  }
+  
+  .dark-metric-negative {
+    color: var(--color-dark-negative);
+  }
+}

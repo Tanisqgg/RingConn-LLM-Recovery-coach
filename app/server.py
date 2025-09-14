@@ -12,6 +12,7 @@ from . import DATA_DIR
 from .coach_agent import run_chat, is_ollama_up, OLLAMA_MODEL
 from .fit_sync import synchronize
 from .anomaly_detector import load_segments, compute_daily_metrics
+from .readiness_model import predict_today
 
 # -----------------------------------
 # Flask app
@@ -19,8 +20,8 @@ from .anomaly_detector import load_segments, compute_daily_metrics
 app = Flask(__name__, static_folder=None)
 CORS(app, resources={r"/api/*": {"origins": "*"}, r"/chat": {"origins": "*"}})
 
-# Where the React build will land (vite build -> web/dist)
-FRONTEND_DIR = Path(__file__).resolve().parents[1] / "web" / "dist"
+# Where the React build will land (vite build -> frontend/build)
+FRONTEND_DIR = Path(__file__).resolve().parents[1] / "frontend" / "build"
 
 # -----------------------------------
 # API: model status (for the top pill)
@@ -170,6 +171,32 @@ def serve_frontend(path: str):
     return send_from_directory(FRONTEND_DIR, "index.html")
 
 # -----------------------------------
+
+def _get_daily_timeseries() -> list[DailyRow]:
+    """
+    TODO: Replace with your actual data fetch (from fit_sync/db).
+    Must return ascending by date with fields filled where available.
+    """
+    rows = []
+    # Example scaffold – plug real fetch here:
+    # for d in fetch_last_120_days():
+    #     rows.append(DailyRow(
+    #         date=d["date"], readiness=d.get("readiness"),
+    #         rhr=d.get("resting_hr"), hrv=d.get("hrv_rmssd"),
+    #         sleep_total_min=d.get("sleep_total_min"),
+    #         sleep_deep_min=d.get("sleep_deep_min"),
+    #         sleep_rem_min=d.get("sleep_rem_min"),
+    #         activity_min=d.get("moderate_vigorous_min"),
+    #         steps=d.get("steps"),
+    #         temp_dev_c=d.get("temp_deviation_c"),
+    #     ))
+    return rows
+
+@app.get("/api/readiness/predict")
+def readiness_predict():
+    hist = _get_daily_timeseries()
+    result = predict_today(hist)
+    return jsonify(result)
 if __name__ == "__main__":
     port = int(os.getenv("PORT", "5000"))
     app.run(host="0.0.0.0", port=port, debug=True)
