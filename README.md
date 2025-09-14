@@ -2,6 +2,9 @@
 
 A comprehensive health and fitness coaching application that integrates with Google Fit to provide personalized AI-powered insights and visualizations for your wellness data.
 
+<img width="1805" height="1258" alt="image" src="https://github.com/user-attachments/assets/c3e82365-015b-4128-bae4-f5c16dfc3783" />
+
+
 ## 🎯 Overview
 
 This application serves as your personal health coach, combining fitness data from Google Fit with AI-powered analysis to provide:
